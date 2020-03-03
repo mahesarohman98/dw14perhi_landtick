@@ -71,8 +71,6 @@ exports.findAllOrder = async () => {
 exports.isQuantityPossible = async (id, data) => {
   try {
     const { trainId, qty } = data;
-    // const Op = Sequelize.Op;
-    // where: { [Op.and]: [{ trainId, status: "Approved" }] },
     const quantity = await Order.findAll({
       where: {
         trainId,
@@ -123,21 +121,40 @@ exports.createOrder = async (id, data, price) => {
 };
 
 exports.findTodayOrder = async (dateStart, userId) => {
-  const data = await Order.findAll({
-    where: { status: "Approved", userId },
-    include: [
+  try {
+    const data = await Order.findAll({
+      where: { status: "Approved", userId },
+      include: [
+        {
+          model: Ticket,
+          as: "ticket",
+          attributes: ["id", "qty", "price", "dateStart"],
+          where: { dateStart }
+        },
+        {
+          model: User,
+          as: "customer",
+          attributes: ["id", "name", "gender", "phone", "address"]
+        }
+      ]
+    });
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.updateOrder = async (id, data) => {
+  try {
+    const { status } = data;
+    const returnData = await Order.update(
+      { status },
       {
-        model: Ticket,
-        as: "ticket",
-        attributes: ["id", "qty", "price", "dateStart"],
-        where: { dateStart }
-      },
-      {
-        model: User,
-        as: "customer",
-        attributes: ["id", "name", "gender", "phone", "address"]
+        where: { id }
       }
-    ]
-  });
-  return data;
+    );
+    return returnData;
+  } catch (err) {
+    console.log(err);
+  }
 };

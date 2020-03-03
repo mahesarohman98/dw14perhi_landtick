@@ -4,7 +4,8 @@ const {
   findOrder,
   findTodayOrder,
   findAllOrder,
-  findOrderId
+  findOrderId,
+  updateOrder
 } = require("../helper/order");
 
 exports.create = async (req, res) => {
@@ -68,4 +69,11 @@ exports.find = async (req, res) => {
 
 exports.edit = async (req, res) => {
   const { id } = req.params;
+  const check = await findOrderId(id);
+  if (req.roles == "Admin") {
+    const data = await updateOrder(id, req.body);
+    res.send({ data });
+  } else {
+    res.status(401).send({ error: "Not authorized to access this resource" });
+  }
 };

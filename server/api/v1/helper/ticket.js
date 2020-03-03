@@ -51,3 +51,29 @@ exports.findTodayTicket = async dateStart => {
   });
   return data;
 };
+
+exports.CreateTicket = async data => {
+  const {
+    name,
+    typeId,
+    dateStart,
+    startStation,
+    startTime,
+    destinationStation,
+    arrivalTime,
+    price,
+    qty
+  } = data;
+  const returnData = await Ticket.create({
+    name,
+    typeId,
+    dateStart,
+    startStation,
+    startTime,
+    destinationStation,
+    arrivalTime,
+    price,
+    qty
+  });
+  return returnData;
+};
