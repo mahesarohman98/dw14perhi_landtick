@@ -1,12 +1,13 @@
 const {
   isQuantityPossible,
   createOrder,
-  findOrder
+  findOrder,
+  findTodayOrder
 } = require("../helper/order");
 
 exports.create = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.userId;
     const isDouble = await findOrder(req.body.trainId, id);
     if (isDouble == null) {
       const check = await isQuantityPossible(id, req.body);
@@ -25,6 +26,18 @@ exports.create = async (req, res) => {
     } else {
       res.send({ message: "you already booked" });
     }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.todayTicket = async (req, res) => {
+  try {
+    const { userId } = req;
+    console.log(userId, "====================)");
+
+    const data = await findTodayOrder(new Date(), userId);
+    res.send(data);
   } catch (err) {
     console.log(err);
   }

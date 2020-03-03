@@ -3,6 +3,7 @@ const Order = models.order;
 const Ticket = models.train;
 const User = models.user;
 const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 
 exports.findOrder = async (trainId, userId) => {
   try {
@@ -25,7 +26,7 @@ exports.findOrder = async (trainId, userId) => {
 exports.isQuantityPossible = async (id, data) => {
   try {
     const { trainId, qty } = data;
-    const Op = Sequelize.Op;
+    // const Op = Sequelize.Op;
     // where: { [Op.and]: [{ trainId, status: "Approved" }] },
     const quantity = await Order.findAll({
       where: {
@@ -74,4 +75,24 @@ exports.createOrder = async (id, data, price) => {
     updatedAt: new Date()
   });
   return order;
+};
+
+exports.findTodayOrder = async (dateStart, userId) => {
+  const data = await Order.findAll({
+    where: { status: "Approved", userId },
+    include: [
+      {
+        model: Ticket,
+        as: "ticket",
+        attributes: ["id", "qty", "price", "dateStart"],
+        where: { dateStart }
+      },
+      {
+        model: User,
+        as: "customer",
+        attributes: ["id", "name", "gender", "phone", "address"]
+      }
+    ]
+  });
+  return data;
 };

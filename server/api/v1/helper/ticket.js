@@ -37,3 +37,17 @@ exports.findAllTicket = async (startTime, dateStart) => {
     console.log(err);
   }
 };
+
+exports.findTodayTicket = async dateStart => {
+  const data = await Ticket.findAll({
+    where: { dateStart },
+    include: [
+      {
+        model: Type,
+        as: "type",
+        attributes: ["id", "name"]
+      }
+    ]
+  });
+  return data;
+};
