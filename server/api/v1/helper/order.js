@@ -23,6 +23,51 @@ exports.findOrder = async (trainId, userId) => {
   }
 };
 
+exports.findOrderId = async id => {
+  try {
+    const order = await Order.findOne({
+      where: { id },
+      include: [
+        {
+          model: User,
+          as: "customer",
+          attributes: ["id", "name", "gender", "phone", "address"]
+        },
+        {
+          model: Ticket,
+          as: "ticket",
+          attributes: ["id", "qty", "price"]
+        }
+      ]
+    });
+    return order;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.findAllOrder = async () => {
+  try {
+    const order = await Order.findAll({
+      include: [
+        {
+          model: User,
+          as: "customer",
+          attributes: ["id", "name", "gender", "phone", "address"]
+        },
+        {
+          model: Ticket,
+          as: "ticket",
+          attributes: ["id", "qty", "price"]
+        }
+      ]
+    });
+    return order;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 exports.isQuantityPossible = async (id, data) => {
   try {
     const { trainId, qty } = data;

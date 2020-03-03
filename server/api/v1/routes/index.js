@@ -9,8 +9,11 @@ const { auth } = require("../middleware/auth");
 
 router.get("/tickets", ticketController.findAll);
 
-router.post("/order/:id", orderController.create);
-router.get("/my_tickets", auth, orderController.todayTicket);
+router.post("/order", auth, orderController.create);
+router.get("/order/:id", auth, orderController.find);
+router.put("/order/:id", auth, orderController.edit);
+router.get("/my_tickets", auth, orderController.todayOrder);
+router.get("/orders", auth, orderController.findAll);
 
 router.post("/auth/login", authController.login);
 

@@ -2,7 +2,9 @@ const {
   isQuantityPossible,
   createOrder,
   findOrder,
-  findTodayOrder
+  findTodayOrder,
+  findAllOrder,
+  findOrderId
 } = require("../helper/order");
 
 exports.create = async (req, res) => {
@@ -13,8 +15,6 @@ exports.create = async (req, res) => {
       const check = await isQuantityPossible(id, req.body);
       if (check != false) {
         const order = await createOrder(id, req.body, check);
-        console.log(order.dataValues, "=============D");
-
         const data = await findOrder(
           order.dataValues.trainId,
           order.dataValues.userId
@@ -31,14 +31,41 @@ exports.create = async (req, res) => {
   }
 };
 
-exports.todayTicket = async (req, res) => {
+exports.todayOrder = async (req, res) => {
   try {
     const { userId } = req;
-    console.log(userId, "====================)");
-
     const data = await findTodayOrder(new Date(), userId);
     res.send(data);
   } catch (err) {
     console.log(err);
   }
+};
+
+exports.findAll = async (req, res) => {
+  try {
+    if (req.roles == "Admin") {
+      const data = await findAllOrder();
+      res.send({ data });
+    } else {
+      res.status(401).send({ error: "Not authorized to access this resource" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.find = async (req, res) => {
+  const { id } = req.params;
+  const data = await findOrderId(id);
+  console.log(req.userId);
+  console.log(data.userId);
+  if (req.roles == "Admin" || req.userId === data.userId) {
+    res.send({ data });
+  } else {
+    res.status(401).send({ error: "Not authorized to access this resource" });
+  }
+};
+
+exports.edit = async (req, res) => {
+  const { id } = req.params;
 };
