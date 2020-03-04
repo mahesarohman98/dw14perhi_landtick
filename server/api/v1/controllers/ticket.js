@@ -30,9 +30,10 @@ exports.findTickets = async (req, res) => {
   try {
     if (req.body.quantity > 0) {
       const data = await findTicketsHelper(req.body);
-      res.send(data);
+      res.send({ data });
     } else {
-      res.send();
+      const data = [];
+      res.send({ data });
     }
   } catch (err) {
     console.log(err);
@@ -44,8 +45,8 @@ exports.create = async (req, res) => {
     console.log(req.roles);
 
     if (req.roles == "Admin") {
-      const data = CreateTicket(req.body);
-      res.send(data);
+      const data = await findTicketsHelper(req.body);
+      res.send({ data });
     } else {
       res.status(401).send({ error: "Not authorized to access this resource" });
     }

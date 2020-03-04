@@ -6,61 +6,22 @@ const Op = Sequelize.Op;
 
 exports.findAllTicket = async (startTime, dateStart) => {
   try {
-    if (dateStart == null && startTime != null) {
-      const data = await Ticket.findAll({
-        where: {
-          startTime,
-          remainingQty: {
-            [Op.lt]: Sequelize.literal("remainingQty + 1")
-          }
+    const data = await Ticket.findAll({
+      where: {
+        remainingQty: {
+          [Op.lt]: Sequelize.literal("remainingQty + 1")
         },
-        include: [
-          {
-            model: Type,
-            as: "type",
-            attributes: ["id", "name"]
-          }
-        ]
-      });
-      return data;
-    } else if (startTime == "" && dateStart != null) {
-      console.log("sddddd");
-      const data = await Ticket.findAll({
-        where: {
-          dateStart,
-          remainingQty: {
-            [Op.lt]: Sequelize.literal("remainingQty + 1")
-          }
-        },
-        include: [
-          {
-            model: Type,
-            as: "type",
-            attributes: ["id", "name"]
-          }
-        ]
-      });
-      return data;
-    } else {
-      console.log(dateStart);
-      const data = await Ticket.findAll({
-        where: {
-          startTime,
-          dateStart,
-          remainingQty: {
-            [Op.lt]: Sequelize.literal("remainingQty + 1")
-          }
-        },
-        include: [
-          {
-            model: Type,
-            as: "type",
-            attributes: ["id", "name"]
-          }
-        ]
-      });
-      return data;
-    }
+        [Op.or]: [{ startTime }, { dateStart }]
+      },
+      include: [
+        {
+          model: Type,
+          as: "type",
+          attributes: ["id", "name"]
+        }
+      ]
+    });
+    return data;
   } catch (err) {
     console.log(err);
   }
@@ -111,22 +72,62 @@ exports.CreateTicket = async data => {
 exports.findTicketsHelper = async data => {
   try {
     const { startStation, destinationStation, dateStart, quantity } = data;
-    const returnData = await Ticket.findAll({
-      where: {
-        qty: {
-          [Op.gt]: Sequelize.literal("`train`.`remainingQty` + " + quantity)
+    if (startStation == "" && destinationStation != "") {
+      console.log("startStation: ", startStation);
+      const returnData = await Ticket.findAll({
+        where: {
+          destinationStation,
+          dateStart,
+          qty: {
+            [Op.gt]: Sequelize.literal("remainingQty - 1 + " + quantity)
+          }
         },
-        [Op.or]: [{ startStation }, { destinationStation }, { dateStart }]
-      },
-      include: [
-        {
-          model: Type,
-          as: "type",
-          attributes: ["id", "name"]
-        }
-      ]
-    });
-    return returnData;
+        include: [
+          {
+            model: Type,
+            as: "type",
+            attributes: ["id", "name"]
+          }
+        ]
+      });
+      return returnData;
+    } else if (startStation != "" && destinationStation == "") {
+      console.log("destinationStation: ", destinationStation);
+      const returnData = await Ticket.findAll({
+        where: {
+          startStation,
+          dateStart,
+          qty: {
+            [Op.gt]: Sequelize.literal("remainingQty - 1 + " + quantity)
+          }
+        },
+        include: [
+          {
+            model: Type,
+            as: "type",
+            attributes: ["id", "name"]
+          }
+        ]
+      });
+      return returnData;
+    } else {
+      const returnData = await Ticket.findAll({
+        where: {
+          qty: {
+            [Op.gt]: Sequelize.literal("remainingQty - 1 + " + quantity)
+          },
+          [Op.or]: [{ startStation }, { destinationStation }, { dateStart }]
+        },
+        include: [
+          {
+            model: Type,
+            as: "type",
+            attributes: ["id", "name"]
+          }
+        ]
+      });
+      return returnData;
+    }
   } catch (err) {
     console.log(err);
   }
