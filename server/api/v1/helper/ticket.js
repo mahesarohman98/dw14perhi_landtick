@@ -6,7 +6,7 @@ const Sequelize = require("sequelize");
 exports.findAllTicket = async (startTime, dateStart) => {
   try {
     const Op = Sequelize.Op;
-    if (dateStart == null) {
+    if (dateStart == null && startTime != null) {
       const data = await Ticket.findAll({
         where: { startTime },
         include: [
@@ -18,9 +18,21 @@ exports.findAllTicket = async (startTime, dateStart) => {
         ]
       });
       return data;
+    } else if (startTime == "" && dateStart != null) {
+      console.log("sddddd");
+      const data = await Ticket.findAll({
+        where: { dateStart },
+        include: [
+          {
+            model: Type,
+            as: "type",
+            attributes: ["id", "name"]
+          }
+        ]
+      });
+      return data;
     } else {
       console.log(dateStart);
-
       const data = await Ticket.findAll({
         where: { [Op.and]: [{ startTime, dateStart }] },
         include: [
@@ -76,4 +88,18 @@ exports.CreateTicket = async data => {
     qty
   });
   return returnData;
+};
+
+exports.findTicketsHelper = async dateStart => {
+  const data = await Ticket.findAll({
+    where: { dateStart },
+    include: [
+      {
+        model: Type,
+        as: "type",
+        attributes: ["id", "name"]
+      }
+    ]
+  });
+  return data;
 };

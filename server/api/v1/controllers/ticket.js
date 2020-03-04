@@ -7,6 +7,7 @@ const {
 exports.findAll = async (req, res) => {
   try {
     const { startTime, dateStart } = req.query;
+    console.log(startTime, "hhhhhhhhhh");
     console.log(startTime);
     const data = await findAllTicket(startTime, dateStart);
     res.send({ data });
@@ -19,6 +20,14 @@ exports.todayTicket = async (req, res) => {
   try {
     const data = await findTodayTicket(new Date(), null);
     res.send(data);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.findTickets = async (req, res) => {
+  try {
+    res.send();
   } catch (err) {
     console.log(err);
   }

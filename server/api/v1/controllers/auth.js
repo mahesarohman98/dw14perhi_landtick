@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const models = require("../../../models");
-const saltRounds = 10;
 const User = models.user;
+const saltRounds = 10;
 
 const { createUser } = require("../helper/auth");
 
@@ -37,5 +37,30 @@ exports.register = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+  }
+};
+
+exports.check = async (req, res) => {
+  try {
+    const id = req.userId;
+    console.log(id);
+
+    const data = await User.findOne({
+      where: { id },
+      attributes: {
+        exclude: ["id", "password", "roles", "createdAt", "updatedAt"]
+      }
+    });
+    if (data) {
+      res.status(200).send({ status: true, message: "succes", data });
+    } else {
+      res
+        .status(404)
+        .send({ status: false, message: "user not found", data: {} });
+    }
+  } catch (err) {
+    res
+      .status(404)
+      .send({ status: false, message: "Authorization not Allowed" });
   }
 };
