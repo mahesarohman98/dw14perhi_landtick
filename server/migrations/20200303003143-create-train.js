@@ -59,6 +59,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
+      remainingQty: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

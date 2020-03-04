@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
       destinationStation: DataTypes.STRING,
       arrivalTime: DataTypes.TIME,
       price: DataTypes.INTEGER,
-      qty: DataTypes.INTEGER
+      qty: DataTypes.INTEGER,
+      remainingQty: DataTypes.INTEGER
     },
     {}
   );

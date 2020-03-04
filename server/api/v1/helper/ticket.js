@@ -2,13 +2,18 @@ const models = require("../../../models");
 const Ticket = models.train;
 const Type = models.type;
 const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 
 exports.findAllTicket = async (startTime, dateStart) => {
   try {
-    const Op = Sequelize.Op;
     if (dateStart == null && startTime != null) {
       const data = await Ticket.findAll({
-        where: { startTime },
+        where: {
+          startTime,
+          remainingQty: {
+            [Op.lt]: Sequelize.literal("remainingQty + 1")
+          }
+        },
         include: [
           {
             model: Type,
@@ -21,7 +26,12 @@ exports.findAllTicket = async (startTime, dateStart) => {
     } else if (startTime == "" && dateStart != null) {
       console.log("sddddd");
       const data = await Ticket.findAll({
-        where: { dateStart },
+        where: {
+          dateStart,
+          remainingQty: {
+            [Op.lt]: Sequelize.literal("remainingQty + 1")
+          }
+        },
         include: [
           {
             model: Type,
@@ -34,7 +44,13 @@ exports.findAllTicket = async (startTime, dateStart) => {
     } else {
       console.log(dateStart);
       const data = await Ticket.findAll({
-        where: { [Op.and]: [{ startTime, dateStart }] },
+        where: {
+          startTime,
+          dateStart,
+          remainingQty: {
+            [Op.lt]: Sequelize.literal("remainingQty + 1")
+          }
+        },
         include: [
           {
             model: Type,
@@ -74,7 +90,8 @@ exports.CreateTicket = async data => {
     destinationStation,
     arrivalTime,
     price,
-    qty
+    qty,
+    remainingQty
   } = data;
   const returnData = await Ticket.create({
     name,
@@ -85,21 +102,32 @@ exports.CreateTicket = async data => {
     destinationStation,
     arrivalTime,
     price,
-    qty
+    qty,
+    remainingQty
   });
   return returnData;
 };
 
-exports.findTicketsHelper = async dateStart => {
-  const data = await Ticket.findAll({
-    where: { dateStart },
-    include: [
-      {
-        model: Type,
-        as: "type",
-        attributes: ["id", "name"]
-      }
-    ]
-  });
-  return data;
+exports.findTicketsHelper = async data => {
+  try {
+    const { startStation, destinationStation, dateStart, quantity } = data;
+    const returnData = await Ticket.findAll({
+      where: {
+        qty: {
+          [Op.gt]: Sequelize.literal("`train`.`remainingQty` + " + quantity)
+        },
+        [Op.or]: [{ startStation }, { destinationStation }, { dateStart }]
+      },
+      include: [
+        {
+          model: Type,
+          as: "type",
+          attributes: ["id", "name"]
+        }
+      ]
+    });
+    return returnData;
+  } catch (err) {
+    console.log(err);
+  }
 };

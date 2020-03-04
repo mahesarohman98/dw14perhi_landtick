@@ -1,7 +1,8 @@
 const {
   findAllTicket,
   findTodayTicket,
-  CreateTicket
+  CreateTicket,
+  findTicketsHelper
 } = require("../helper/ticket");
 
 exports.findAll = async (req, res) => {
@@ -27,7 +28,12 @@ exports.todayTicket = async (req, res) => {
 
 exports.findTickets = async (req, res) => {
   try {
-    res.send();
+    if (req.body.quantity > 0) {
+      const data = await findTicketsHelper(req.body);
+      res.send(data);
+    } else {
+      res.send();
+    }
   } catch (err) {
     console.log(err);
   }

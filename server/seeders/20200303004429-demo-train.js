@@ -15,7 +15,8 @@ module.exports = {
           destinationStation: "Stasiun Surabaya Pasarturi",
           arrivalTime: new Date(),
           price: 10000,
-          qty: 3,
+          qty: 6,
+          remainingQty: 3,
           createdAt: new Date(),
           updatedAt: new Date()
         }
