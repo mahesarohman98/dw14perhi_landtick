@@ -10,12 +10,12 @@ const {
 
 exports.create = async (req, res) => {
   try {
-    const id = req.userId;
-    const isDouble = await findOrder(req.body.trainId, id);
+    const { userId } = req;
+    const isDouble = await findOrder(req.body.trainId, userId);
     if (isDouble == null) {
-      const check = await isQuantityPossible(id, req.body);
-      if (check != false) {
-        const order = await createOrder(id, req.body, check);
+      const check = await isQuantityPossible(userId, req.body);
+      if (check != null) {
+        const order = await createOrder(userId, req.body, check);
         const data = await findOrder(
           order.dataValues.trainId,
           order.dataValues.userId

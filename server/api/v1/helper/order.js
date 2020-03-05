@@ -70,48 +70,37 @@ exports.findAllOrder = async () => {
 
 exports.isQuantityPossible = async (id, data) => {
   try {
-    const { trainId, qty } = data;
-    const quantity = await Order.findAll({
+    const { trainId, quantity } = data;
+    const check = await Ticket.findOne({
       where: {
-        trainId,
-        [Op.or]: [{ status: "Approved" }, { status: "Pending" }]
-      },
-      include: [
-        {
-          model: Ticket,
-          as: "ticket",
-          attributes: ["id", "qty", "price"]
+        id: trainId,
+        qty: {
+          [Op.gt]: Sequelize.literal("remainingQty - 1 + " + quantity)
         }
-      ],
-      attributes: [
-        "Order.qty",
-        [Sequelize.fn("sum", Sequelize.col("Order.qty")), "totalQty"]
-      ]
+      }
     });
-    const myquantity = quantity[0].dataValues.ticket.qty;
-    const totalQuantity = quantity[0].dataValues.totalQty;
-    if (myquantity - totalQuantity - qty >= 0) {
-      console.log(quantity[0].dataValues.ticket.price);
-
-      return quantity[0].dataValues.ticket.price;
-    } else {
-      return false;
-    }
-    return quantity;
+    return check;
   } catch (err) {
     console.log(err);
   }
 };
 
-exports.createOrder = async (id, data, price) => {
-  const { trainId, qty } = data;
-  const totalPrice = price * qty;
-  console.log(price);
+exports.createOrder = async (userId, data, check) => {
+  const { trainId, quantity } = data;
+  const totalPrice = check.price * quantity;
+  const updateQty = check.remainingQty + quantity;
+
+  await Ticket.update(
+    { remainingQty: updateQty },
+    {
+      where: { id: check.id }
+    }
+  );
 
   const order = await Order.create({
     trainId,
-    userId: id,
-    qty,
+    userId,
+    qty: quantity,
     status: "Pending",
     totalPrice,
     createdAt: new Date(),
