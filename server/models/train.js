@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
       as: "train",
       foreignKey: "trainId"
     });
+
+    train.hasMany(models.identity, {
+      as: "myTrain"
+    });
   };
   return train;
 };

@@ -14,6 +14,16 @@ module.exports = (sequelize, DataTypes) => {
   order.associate = function(models) {
     order.belongsTo(models.train, { as: "ticket", foreignKey: "trainId" });
     order.belongsTo(models.user, { as: "customer", foreignKey: "userId" });
+
+    // order.hasMany(models.identity, {
+    //   as: "transaksi",
+    //   foreignKey: "order"
+    // });
+    // order.belongsToMany(models.user, {
+    //   through: models.identity,
+    //   as: "myOrder",
+    //   foreignKey: "trainId"
+    // });
   };
   return order;
 };

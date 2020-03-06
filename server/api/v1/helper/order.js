@@ -2,6 +2,7 @@ const models = require("../../../models");
 const Order = models.order;
 const Ticket = models.train;
 const User = models.user;
+const Identity = models.identity;
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
@@ -26,7 +27,7 @@ exports.findOrder = async (trainId, userId) => {
 exports.findOrderId = async id => {
   try {
     const order = await Order.findOne({
-      where: { id },
+      where: { orderId: 1 },
       include: [
         {
           model: User,
@@ -48,21 +49,17 @@ exports.findOrderId = async id => {
 
 exports.findAllOrder = async () => {
   try {
-    const order = await Order.findAll({
+    const data = await Identity.findAll({
+      where: { orderId: 1 },
       include: [
         {
-          model: User,
-          as: "customer",
-          attributes: ["id", "name", "gender", "phone", "address"]
-        },
-        {
           model: Ticket,
-          as: "ticket",
-          attributes: ["id", "qty", "price"]
+          as: "myTrain",
+          attributes: ["id", "name"]
         }
       ]
     });
-    return order;
+    return data;
   } catch (err) {
     console.log(err);
   }

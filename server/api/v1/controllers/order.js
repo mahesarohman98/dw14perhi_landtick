@@ -44,12 +44,8 @@ exports.todayOrder = async (req, res) => {
 
 exports.findAll = async (req, res) => {
   try {
-    if (req.roles == "Admin") {
-      const data = await findAllOrder();
-      res.send({ data });
-    } else {
-      res.status(401).send({ error: "Not authorized to access this resource" });
-    }
+    const data = await findAllOrder();
+    res.send({ data });
   } catch (err) {
     console.log(err);
   }
