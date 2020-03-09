@@ -5,7 +5,9 @@ const {
   findTodayOrder,
   findAllOrder,
   findOrderId,
-  updateOrder
+  updateOrder,
+  getAllOrderId,
+  updateIdentity
 } = require("../helper/order");
 
 exports.create = async (req, res) => {
@@ -42,9 +44,20 @@ exports.todayOrder = async (req, res) => {
   }
 };
 
+exports.findMyOrder = async (req, res) => {
+  try {
+    const { userId } = req;
+    const data = await getAllOrderId(userId);
+    res.send({ data });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 exports.findAll = async (req, res) => {
   try {
-    const data = await findAllOrder();
+    const { orderId } = req.params;
+    const data = await findAllOrder(orderId);
     res.send({ data });
   } catch (err) {
     console.log(err);
@@ -72,4 +85,17 @@ exports.edit = async (req, res) => {
   } else {
     res.status(401).send({ error: "Not authorized to access this resource" });
   }
+};
+
+exports.updateMyOrder = async (req, res) => {
+  const data = req.body;
+  let updateData = { tandaPengenal: "", nama: "", noHp: "", email: "" };
+  data.id.map((id, index) => {
+    updateData.tandaPengenal = data.tandaPengenal[index];
+    updateData.nama = data.nama[index];
+    updateData.noHp = data.noHp[index];
+    updateData.email = data.email[index];
+    updateIdentity(updateData, id);
+  });
+  res.send({ data });
 };

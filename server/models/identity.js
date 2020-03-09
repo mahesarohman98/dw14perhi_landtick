@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
       as: "myTrain",
       foreignKey: "trainId"
     });
+    identity.belongsTo(models.order, {
+      as: "transaksi",
+      foreignKey: "orderId"
+    });
 
     identity.belongsTo(models.user, {
       as: "pemesan",

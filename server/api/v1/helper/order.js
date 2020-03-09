@@ -1,6 +1,7 @@
 const models = require("../../../models");
 const Order = models.order;
 const Ticket = models.train;
+const Type = models.type;
 const User = models.user;
 const Identity = models.identity;
 const Sequelize = require("sequelize");
@@ -47,22 +48,149 @@ exports.findOrderId = async id => {
   }
 };
 
-exports.findAllOrder = async () => {
+exports.findAllOrder = async orderId => {
   try {
     const data = await Identity.findAll({
-      where: { orderId: 1 },
+      where: { orderId },
+      attributes: [
+        [
+          models.sequelize.literal(
+            "GROUP_CONCAT(identity.id ORDER BY `identity`.`id` ASC)"
+          ),
+          "listId"
+        ],
+        [
+          models.sequelize.literal(
+            "GROUP_CONCAT(tandaPengenal ORDER BY `identity`.`id` ASC)"
+          ),
+          "listTandaPengenal"
+        ],
+        [
+          models.sequelize.literal(
+            "GROUP_CONCAT(nama ORDER BY `identity`.`id` ASC)"
+          ),
+          "listNama"
+        ],
+        [
+          models.sequelize.literal(
+            "GROUP_CONCAT(noHp ORDER BY `identity`.`id` ASC)"
+          ),
+          "listNoHp"
+        ],
+        [
+          models.sequelize.literal(
+            "GROUP_CONCAT(email ORDER BY `identity`.`id` ASC)"
+          ),
+          "listEmail"
+        ],
+        "orderId"
+      ],
       include: [
         {
-          model: Ticket,
-          as: "myTrain",
-          attributes: ["id", "name"]
+          model: Order,
+          as: "transaksi",
+          include: [
+            {
+              model: Ticket,
+              as: "ticket",
+              attributes: [
+                "id",
+                "name",
+                "dateStart",
+                "startStation",
+                "startTime",
+                "arrivalTime",
+                "destinationStation",
+                "price"
+              ],
+              include: [
+                {
+                  model: Type,
+                  as: "type",
+                  attributes: ["id", "name"]
+                }
+              ]
+            }
+          ]
         }
-      ]
+      ],
+      group: ["orderId"]
     });
     return data;
   } catch (err) {
     console.log(err);
   }
+};
+
+exports.getAllOrderId = async userId => {
+  const data = Identity.findAll({
+    where: { userId },
+    attributes: [
+      [
+        models.sequelize.literal(
+          "GROUP_CONCAT(identity.id ORDER BY `identity`.`id` ASC)"
+        ),
+        "listId"
+      ],
+      [
+        models.sequelize.literal(
+          "GROUP_CONCAT(tandaPengenal ORDER BY `identity`.`id` ASC)"
+        ),
+        "listTandaPengenal"
+      ],
+      [
+        models.sequelize.literal(
+          "GROUP_CONCAT(nama ORDER BY `identity`.`id` ASC)"
+        ),
+        "listNama"
+      ],
+      [
+        models.sequelize.literal(
+          "GROUP_CONCAT(noHp ORDER BY `identity`.`id` ASC)"
+        ),
+        "listNoHp"
+      ],
+      [
+        models.sequelize.literal(
+          "GROUP_CONCAT(email ORDER BY `identity`.`id` ASC)"
+        ),
+        "listEmail"
+      ],
+      "orderId"
+    ],
+    include: [
+      {
+        model: Order,
+        as: "transaksi",
+        include: [
+          {
+            model: Ticket,
+            as: "ticket",
+            attributes: [
+              "id",
+              "name",
+              "dateStart",
+              "startStation",
+              "startTime",
+              "arrivalTime",
+              "destinationStation",
+              "price"
+            ],
+            include: [
+              {
+                model: Type,
+                as: "type",
+                attributes: ["id", "name"]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    group: ["orderId"]
+  });
+  // order: Sequelize.literal("`identity`.`userId`")
+  return data;
 };
 
 exports.isQuantityPossible = async (id, data) => {
@@ -103,6 +231,39 @@ exports.createOrder = async (userId, data, check) => {
     createdAt: new Date(),
     updatedAt: new Date()
   });
+
+  const myorder = await Order.findOne({
+    where: {
+      trainId,
+      userId
+    },
+    attributes: [
+      "id",
+      "trainId",
+      "userId",
+      "qty",
+      "status",
+      "totalPrice",
+      "createdAt",
+      "updatedAt"
+    ]
+  });
+  console.log(myorder.id, "000000000000000000000000");
+
+  for (let i = 0; i < quantity; i++) {
+    await Identity.create({
+      tandaPengenal: null,
+      orderId: myorder.id,
+      userId: myorder.userId,
+      trainId: myorder.trainId,
+      nama: null,
+      noHp: null,
+      email: null,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+  }
+
   return order;
 };
 
@@ -140,6 +301,19 @@ exports.updateOrder = async (id, data) => {
       }
     );
     return returnData;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.updateIdentity = async (data, id) => {
+  try {
+    const { tandaPengenal, nama, noHp, email } = data;
+    await Identity.update(
+      { tandaPengenal, nama, noHp, email },
+      { where: { id } }
+    );
+    return;
   } catch (err) {
     console.log(err);
   }
