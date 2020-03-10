@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
       userId: DataTypes.INTEGER,
       qty: DataTypes.INTEGER,
       status: DataTypes.ENUM("Pending", "Approved", "Cancel"),
-      totalPrice: DataTypes.INTEGER
+      totalPrice: DataTypes.INTEGER,
+      attachment: DataTypes.STRING
     },
     {}
   );

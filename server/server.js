@@ -20,12 +20,12 @@ app.use((req, res, next) => {
   next(error);
 });
 
-app.use((error, req, res, next) => {
-  if (err.name === "UnauthorizedError") {
-    res.status(401).json({ message: "You are not authorized." });
-  } else {
-    next(err);
-  }
-});
+// app.use((error, req, res, next) => {
+//   if (err.name === "UnauthorizedError") {
+//     res.status(401).json({ message: "You are not authorized." });
+//   } else {
+//     next(err);
+//   }
+// });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

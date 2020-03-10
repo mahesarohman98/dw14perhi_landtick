@@ -10,6 +10,12 @@ const {
   updateIdentity
 } = require("../helper/order");
 
+const models = require("../../../models");
+const Order = models.order;
+const Ticket = models.train;
+const Type = models.type;
+const User = models.user;
+
 exports.create = async (req, res) => {
   try {
     const { userId } = req;
@@ -44,6 +50,37 @@ exports.todayOrder = async (req, res) => {
   }
 };
 
+exports.delete = async (req, res) => {
+  res.send("sdsf");
+};
+
+exports.all = async (req, res) => {
+  try {
+    const { roles } = req;
+    if (roles == "Admin") {
+      const data = await Order.findAll({
+        include: [
+          {
+            model: User,
+            as: "customer",
+            attributes: ["id", "name", "gender", "phone", "address"]
+          },
+          {
+            model: Ticket,
+            as: "ticket",
+            attributes: ["id", "qty", "price", "name"]
+          }
+        ]
+      });
+      res.send({ data });
+    } else {
+      res.status(404).send({ message: "Not authorize " });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 exports.findMyOrder = async (req, res) => {
   try {
     const { userId } = req;
@@ -57,7 +94,10 @@ exports.findMyOrder = async (req, res) => {
 exports.findAll = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const data = await findAllOrder(orderId);
+    const order = await findAllOrder(orderId);
+    let data = "";
+    if (order != null) data = order[0];
+    else data = "";
     res.send({ data });
   } catch (err) {
     console.log(err);
@@ -98,4 +138,35 @@ exports.updateMyOrder = async (req, res) => {
     updateIdentity(updateData, id);
   });
   res.send({ data });
+};
+
+exports.paymentProof = async (req, res) => {
+  try {
+    const { filename } = req.file;
+    const { id } = req.body;
+    console.log(id, "gilaaaa");
+    if (!filename) {
+      res.status(400).json({
+        status: "failed",
+        code: "400",
+        message: "Please upload file"
+      });
+    } else {
+      await Order.update(
+        {
+          attachment: filename
+        },
+        { where: { id } }
+      );
+
+      res.status(200).json({
+        status: "success",
+        code: "200",
+        message: "file uploaded successfully",
+        data: filename
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
 };

@@ -212,8 +212,9 @@ exports.isQuantityPossible = async (id, data) => {
 
 exports.createOrder = async (userId, data, check) => {
   const { trainId, quantity } = data;
-  const totalPrice = check.price * quantity;
-  const updateQty = check.remainingQty + quantity;
+  const totalPrice = check.price * parseInt(quantity);
+  const updateQty = parseInt(quantity) + check.remainingQty;
+  console.log(updateQty);
 
   await Ticket.update(
     { remainingQty: updateQty },
@@ -264,7 +265,7 @@ exports.createOrder = async (userId, data, check) => {
     });
   }
 
-  return order;
+  return "order";
 };
 
 exports.findTodayOrder = async (dateStart, userId) => {
@@ -300,7 +301,17 @@ exports.updateOrder = async (id, data) => {
         where: { id }
       }
     );
-    return returnData;
+    const order = await Order.findOne({ where: { status } });
+    if (status == "Cancel") {
+      const ticket = await Ticket.findOne({ where: { id: order.trainId } });
+      const uprice = ticket.remainingQty - order.qty;
+      await Ticket.update(
+        { remainingQty: uprice },
+        { where: { id: order.trainId } }
+      );
+      return order;
+    }
+    return order;
   } catch (err) {
     console.log(err);
   }

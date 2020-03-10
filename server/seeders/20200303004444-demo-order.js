@@ -11,6 +11,7 @@ module.exports = {
           qty: 1,
           status: "Approved",
           totalPrice: 10000,
+          attachment: null,
           createdAt: new Date(),
           updatedAt: new Date()
         },
@@ -20,6 +21,7 @@ module.exports = {
           qty: 2,
           status: "Approved",
           totalPrice: 20000,
+          attachment: null,
           createdAt: new Date(),
           updatedAt: new Date()
         }
