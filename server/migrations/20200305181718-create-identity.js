@@ -17,21 +17,27 @@ module.exports = {
         references: {
           model: "orders",
           key: "id"
-        }
+        },
+        onUpdate: "cascade",
+        onDelete: "cascade"
       },
       userId: {
         type: Sequelize.INTEGER,
         references: {
           model: "users",
           key: "id"
-        }
+        },
+        onUpdate: "cascade",
+        onDelete: "cascade"
       },
       trainId: {
         type: Sequelize.INTEGER,
         references: {
           model: "trains",
           key: "id"
-        }
+        },
+        onUpdate: "cascade",
+        onDelete: "cascade"
       },
       nama: {
         type: Sequelize.STRING

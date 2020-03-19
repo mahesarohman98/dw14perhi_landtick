@@ -7,7 +7,8 @@ const {
   findOrderId,
   updateOrder,
   getAllOrderId,
-  updateIdentity
+  updateIdentity,
+  findAllStation
 } = require("../helper/order");
 
 const models = require("../../../models");
@@ -51,7 +52,26 @@ exports.todayOrder = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
-  res.send("sdsf");
+  try {
+    const { id } = req.params;
+    console.log(id);
+
+    const order = await Order.findOne({ where: { id } });
+    console.log(order);
+
+    const ticket = await Ticket.findOne({
+      where: { id: order.trainId }
+    });
+    const uprice = ticket.dataValues.remainingQty - order.dataValues.qty;
+    await Ticket.update(
+      { remainingQty: uprice },
+      { where: { id: order.trainId } }
+    );
+    const data = await Order.destroy({ where: { id } });
+    res.send({ data });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 exports.all = async (req, res) => {
@@ -98,6 +118,15 @@ exports.findAll = async (req, res) => {
     let data = "";
     if (order != null) data = order[0];
     else data = "";
+    res.send({ data });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.getStation = async (req, res) => {
+  try {
+    const data = await findAllStation();
     res.send({ data });
   } catch (err) {
     console.log(err);

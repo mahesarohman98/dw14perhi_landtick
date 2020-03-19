@@ -30,7 +30,11 @@ exports.findTickets = async (req, res) => {
   try {
     if (req.body.quantity > 0) {
       const data = await findTicketsHelper(req.body);
-      res.send({ data });
+      if (data != null) {
+        res.send({ data });
+      } else {
+        res.send({ data: [] });
+      }
     } else {
       const data = [];
       res.send({ data });

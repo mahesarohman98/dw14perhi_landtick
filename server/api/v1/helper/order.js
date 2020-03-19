@@ -25,6 +25,17 @@ exports.findOrder = async (trainId, userId) => {
   }
 };
 
+exports.findAllStation = async () => {
+  try {
+    const ticket = await Ticket.findAll({
+      attributes: ["startStation", "destinationStation"]
+    });
+    return ticket;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 exports.findOrderId = async id => {
   try {
     const order = await Order.findOne({

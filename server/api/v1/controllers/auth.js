@@ -11,29 +11,29 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ where: { email } });
     const result = await bcrypt.compare(password, user.password);
-    if (user && result) {
+    if (user) {
       const token = jwt.sign({ userId: user.id }, process.env.SECRET_KEY);
       const data = { email, token };
       res.status(200).send({ data });
     } else {
-      res.status(401).send({ message: "Invalid login" });
+      res.status(404).send({ message: "Invalid login" });
     }
   } catch (err) {
     console.log(err);
+    res.status(404).send({ message: "Invalid login" });
   }
 };
 
 exports.register = async (req, res) => {
   try {
     const user = await createUser(req.body);
-    console.log(user, "===================)");
     if (user != null) {
       const token = jwt.sign({ userId: user }, process.env.SECRET_KEY);
       const email = req.body.email;
       const data = { email, token };
       res.status(200).send({ data });
     } else {
-      res.send("message: cannot register");
+      res.status(404).send({ message: "cannot register" });
     }
   } catch (err) {
     console.log(err);

@@ -72,6 +72,7 @@ exports.CreateTicket = async data => {
 exports.findTicketsHelper = async data => {
   try {
     const { startStation, destinationStation, dateStart, quantity } = data;
+    console.log(startStation, destinationStation);
     if (startStation == "" && destinationStation != "") {
       console.log("startStation: ", startStation);
       const returnData = await Ticket.findAll({
@@ -110,7 +111,30 @@ exports.findTicketsHelper = async data => {
         ]
       });
       return returnData;
+    } else if (startStation != "" && destinationStation != "") {
+      console.log("sddfdf");
+
+      const returnData = await Ticket.findAll({
+        where: {
+          startStation,
+          destinationStation,
+          dateStart,
+          qty: {
+            [Op.gt]: Sequelize.literal("remainingQty - 1 + " + quantity)
+          }
+        },
+        include: [
+          {
+            model: Type,
+            as: "type",
+            attributes: ["id", "name"]
+          }
+        ]
+      });
+      return returnData;
     } else {
+      console.log("sddfdf");
+
       const returnData = await Ticket.findAll({
         where: {
           qty: {
