@@ -14,7 +14,9 @@ module.exports = {
         references: {
           model: "trains",
           key: "id"
-        }
+        },
+        onUpdate: "cascade",
+        onDelete: "cascade"
       },
       userId: {
         allowNull: false,
@@ -22,7 +24,9 @@ module.exports = {
         references: {
           model: "users",
           key: "id"
-        }
+        },
+        onUpdate: "cascade",
+        onDelete: "cascade"
       },
       qty: {
         allowNull: false,
@@ -36,6 +40,10 @@ module.exports = {
       totalPrice: {
         allowNull: false,
         type: Sequelize.INTEGER
+      },
+      attachment: {
+        allowNull: true,
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

@@ -1,0 +1,157 @@
+.btn-myLight {
+  border-radius: 25px;
+  box-shadow: inset 0 0 15px rgba(55, 84, 170, 0),
+    inset 0 0 20px rgba(255, 255, 255, 0), 7px 7px 15px rgba(55, 84, 170, 0.15),
+    -7px -7px 20px rgba(255, 255, 255, 1),
+    inset 0px 0px 4px rgba(255, 255, 255, 0.2);
+}
+.btn-myLight:hover {
+  /* box-shadow: inset 7px 7px 15px rgba(55, 84, 170, 0.15),
+    inset -7px -7px 20px rgba(255, 255, 255, 1),
+    0px 0px 4px rgba(255, 255, 255, 0.2);
+  transition: box-shadow 399ms ease-in-out; */
+}
+.btn-myLight:active {
+  color: #000000;
+  box-shadow: inset 7px 7px 15px rgba(55, 84, 170, 0.15),
+    inset -7px -7px 20px rgba(255, 255, 255, 1),
+    0px 0px 4px rgba(255, 255, 255, 0.2);
+  transition: box-shadow 399ms ease-in-out;
+}
+.btn-myLight:focus {
+  box-shadow: inset 7px 7px 15px rgba(55, 84, 170, 0.15),
+    inset -7px -7px 20px rgba(255, 255, 255, 1),
+    0px 0px 4px rgba(255, 255, 255, 0.2);
+  transition: box-shadow 399ms ease-in-out;
+}
+/* //------------ */
+.btn-myPrimary {
+  border-radius: 25px;
+  color: #2291f8;
+  box-shadow: inset 0 0 15px rgba(55, 84, 170, 0),
+    inset 0 0 20px rgba(255, 255, 255, 0), 7px 7px 15px rgba(55, 84, 170, 0.15),
+    -7px -7px 20px rgba(255, 255, 255, 1),
+    inset 0px 0px 4px rgba(255, 255, 255, 0.2);
+}
+.btn-myPrimary:hover {
+  color: #2291f8;
+  /* box-shadow: inset 7px 7px 15px rgba(55, 84, 170, 0.15),
+      inset -7px -7px 20px rgba(255, 255, 255, 1),
+      0px 0px 4px rgba(255, 255, 255, 0.2);
+    transition: box-shadow 399ms ease-in-out; */
+}
+.btn-myPrimary:active {
+  color: #2291f8;
+  box-shadow: inset 7px 7px 15px rgba(55, 84, 170, 0.15),
+    inset -7px -7px 20px rgba(255, 255, 255, 1),
+    0px 0px 4px rgba(255, 255, 255, 0.2);
+  transition: box-shadow 399ms ease-in-out;
+}
+.btn-myPrimary:focus {
+  color: #2291f8;
+  box-shadow: inset 7px 7px 15px rgba(55, 84, 170, 0.15),
+    inset -7px -7px 20px rgba(255, 255, 255, 1),
+    0px 0px 4px rgba(255, 255, 255, 0.2);
+  transition: box-shadow 399ms ease-in-out;
+}
+
+/* fd2d2d */
+.btn-myDanger {
+  color: #f82020;
+  border-radius: 25px;
+  box-shadow: inset 0 0 15px rgba(55, 84, 170, 0),
+    inset 0 0 20px rgba(255, 255, 255, 0), 7px 7px 15px rgba(55, 84, 170, 0.15),
+    -7px -7px 20px rgba(255, 255, 255, 1),
+    inset 0px 0px 4px rgba(255, 255, 255, 0.2);
+}
+.btn-myDanger:hover {
+  color: #f82020;
+  /* box-shadow: inset 7px 7px 15px rgba(55, 84, 170, 0.15),
+        inset -7px -7px 20px rgba(255, 255, 255, 1),
+        0px 0px 4px rgba(255, 255, 255, 0.2);
+      transition: box-shadow 399ms ease-in-out; */
+}
+.btn-myDanger:active {
+  color: #f82020;
+  box-shadow: inset 7px 7px 15px rgba(55, 84, 170, 0.15),
+    inset -7px -7px 20px rgba(255, 255, 255, 1),
+    0px 0px 4px rgba(255, 255, 255, 0.2);
+  transition: box-shadow 399ms ease-in-out;
+}
+.btn-myDanger:focus {
+  color: #f82020;
+  box-shadow: inset 7px 7px 15px rgba(55, 84, 170, 0.15),
+    inset -7px -7px 20px rgba(255, 255, 255, 1),
+    0px 0px 4px rgba(255, 255, 255, 0.2);
+  transition: box-shadow 399ms ease-in-out;
+}
+
+.btn-myWarning {
+  background-color: #ff6a38;
+  color: #ffffff;
+  border-radius: 25px;
+  box-shadow: inset 0 0 15px rgba(55, 84, 170, 0),
+    inset 0 0 20px rgba(255, 255, 255, 0), 7px 7px 15px rgba(55, 84, 170, 0.15),
+    -7px -7px 20px rgba(235, 135, 102, 1),
+    inset 0px 0px 4px rgba(255, 255, 255, 0.2);
+}
+
+.btn-myWarning:hover {
+  color: #ffffff;
+  /* box-shadow: inset 7px 7px 15px rgba(55, 84, 170, 0.15),
+          inset -7px -7px 20px rgba(255, 255, 255, 1),
+          0px 0px 4px rgba(255, 255, 255, 0.2);
+        transition: box-shadow 399ms ease-in-out; */
+}
+.btn-myWarning:active {
+  color: #ffffff;
+  box-shadow: inset 7px 7px 15px rgba(55, 84, 170, 0.15),
+    inset -7px -7px 20px rgba(235, 135, 102, 1),
+    0px 0px 4px rgba(255, 255, 255, 0.2);
+  transition: box-shadow 399ms ease-in-out;
+}
+.btn-myWarning:focus {
+  color: #ffffff;
+  box-shadow: inset 7px 7px 15px rgba(55, 84, 170, 0.15),
+    inset -7px -7px 20px rgba(235, 135, 102, 1),
+    0px 0px 4px rgba(255, 255, 255, 0.2);
+  transition: box-shadow 399ms ease-in-out;
+}
+
+.btn-myPrimFill {
+  border-radius: 25px;
+  background-color: #00a2ff;
+  color: #ffffff;
+  box-shadow: inset 0 0 15px rgba(55, 84, 170, 0),
+    inset 0 0 20px rgba(255, 255, 255, 0), 7px 7px 15px rgba(55, 84, 170, 0.15),
+    -7px -7px 20px rgba(255, 255, 255, 1),
+    inset 0px 0px 4px rgba(255, 255, 255, 0.2);
+}
+.btn-myPrimFill:hover {
+  background-color: #00a2ff;
+  color: #ffffff;
+  /* box-shadow: inset 7px 7px 15px rgba(55, 84, 170, 0.15),
+      inset -7px -7px 20px rgba(255, 255, 255, 1),
+      0px 0px 4px rgba(255, 255, 255, 0.2);
+    transition: box-shadow 399ms ease-in-out; */
+}
+.btn-myPrimFill:active {
+  background-color: #00a2ff;
+  color: #ffffff;
+  box-shadow: inset 7px 7px 15px rgba(55, 84, 170, 0.15),
+    inset -7px -7px 20px rgb(0, 162, 255, 1), 0px 0px 4px rgba(255, 255, 255, 1);
+  transition: box-shadow 399ms ease-in-out;
+}
+.btn-myPrimFill:focus {
+  background-color: #00a2ff;
+  color: #ffffff;
+  box-shadow: inset 7px 7px 15px rgba(55, 84, 170, 0.15),
+    inset -7px -7px 20px rgba(0, 162, 255, 1),
+    0px 0px 4px rgba(255, 255, 255, 1);
+  transition: box-shadow 399ms ease-in-out;
+}
+
+/* #fffc3a; */
+/* ea648d
+884ea2
+3d3551 */

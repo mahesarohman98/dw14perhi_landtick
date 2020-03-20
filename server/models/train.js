@@ -11,18 +11,27 @@ module.exports = (sequelize, DataTypes) => {
       destinationStation: DataTypes.STRING,
       arrivalTime: DataTypes.TIME,
       price: DataTypes.INTEGER,
-      qty: DataTypes.INTEGER
+      qty: DataTypes.INTEGER,
+      remainingQty: DataTypes.INTEGER
     },
     {}
   );
   train.associate = function(models) {
     train.belongsTo(models.type, { foreignKey: "typeId", as: "type" });
 
-    train.belongsToMany(models.user, {
-      through: models.order,
-      as: "train",
-      foreignKey: "trainId"
+    // train.belongsToMany(models.user, {
+    //   through: models.order,
+    //   as: "train",
+    //   foreignKey: "trainId"
+    // });
+
+    train.hasMany(models.order, {
+      as: "ticket"
     });
+
+    // train.hasMany(models.identity, {
+    //   as: "myTrain"
+    // });
   };
   return train;
 };
